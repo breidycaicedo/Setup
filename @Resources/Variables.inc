@@ -7,7 +7,7 @@
 
 ; ---------- Tamano general ----------
 ; 1 = normal. Si en tu pantalla se ve pequeno, prueba 1.2 o 1.4
-S=1
+S=1.5
 
 ; ---------- Fuentes ----------
 Fuente=Poppins
