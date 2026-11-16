@@ -123,7 +123,7 @@ local function arco(cx, cy, r, p, ancho, color)
   local x1 = cx + r * math.cos(fin)
   local y1 = cy + r * math.sin(fin)
   return 'Arc ' .. num(x0) .. ',' .. num(y0) .. ',' .. num(x1) .. ',' .. num(y1) .. ','
-    .. num(r) .. ',' .. num(r) .. ',0,0,' .. grande .. ',1'
+    .. num(r) .. ',' .. num(r) .. ',0,0,' .. grande .. ',0'
     .. ' | StrokeWidth ' .. num(ancho)
     .. ' | Stroke Color ' .. color
     .. ' | Fill Color 0,0,0,0'
