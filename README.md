@@ -65,7 +65,7 @@ Clic derecho sobre el panel → **Editar colores, apps y tamaño**. Se abre `Var
 - `S=1` → tamaño general. Si se ve pequeño en tu pantalla, prueba `1.2` o `1.4`.
 - `FormatoHoraReloj=%I` → reloj de 12 horas (`%H` para 24 horas).
 - `App1` … `App8` → nombre, icono, los dos colores del degradado (`Fondo` arriba y `Fondo2` abajo) y lo que abre cada app. La app 2 es un calendario con la fecha de hoy.
-- `FuenteIconos` → en **Windows 10** cámbiala a `Segoe MDL2 Assets`.
+- Para cambiar el icono de una app, busca uno en https://fontawesome.com/icons (filtro *Free* + *Solid*), copia su código (por ejemplo `f1ec`) y ponlo como `[\xF1EC]`.
 
 Guarda y dale *Refresh skin*.
 
@@ -89,4 +89,5 @@ Guarda y dale *Refresh skin*.
 
 ## Créditos
 
-Fuente [Poppins](https://github.com/itfoundry/Poppins) bajo licencia SIL Open Font License (ver `@Resources/Fonts/OFL.txt`).
+- Fuente [Poppins](https://github.com/itfoundry/Poppins) bajo licencia SIL Open Font License (ver `@Resources/Fonts/OFL.txt`).
+- Iconos de [Font Awesome Free](https://fontawesome.com) (fuente bajo SIL OFL 1.1, iconos bajo CC BY 4.0; ver `@Resources/Fonts/FontAwesome-LICENSE.txt`).
