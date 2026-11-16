@@ -78,8 +78,12 @@ Guarda y dale *Refresh skin*.
 | Música | Portada, canción, artista y controles (anterior, play/pausa, siguiente). |
 | Fecha | Día, fecha y hora. |
 | Anillos de colores | Progreso del día (rosa), del mes (verde) y del año (azul). Pasa el mouse para ver los porcentajes. |
-| Volumen / Brillo | Haz clic a la altura que quieras o usa la rueda del mouse. El brillo solo funciona en la pantalla del portátil. |
+| Volumen / Brillo | Mantén el clic y arrastra hacia arriba o abajo, haz clic a la altura que quieras o usa la rueda del mouse. El brillo solo funciona en la pantalla del portátil. |
 | Batería | Porcentaje; se pone roja por debajo de 20 %. |
+
+## Mover el panel
+
+El panel está fijo para que no se mueva cuando usas el volumen o el brillo. Si quieres cambiarlo de lugar: clic derecho al panel → *Configuración* → activa *Arrastrable*, muévelo, y al dar *Actualizar todo* vuelve a quedar fijo.
 
 ## Tips para que no gaste nada
 

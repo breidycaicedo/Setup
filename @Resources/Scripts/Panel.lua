@@ -25,6 +25,11 @@ local colorBateria = '52,199,89,255'
 -- Brillo: false = no se pudo leer (por ejemplo, monitor externo)
 local hayBrillo = false
 local brilloPendiente = nil
+local brilloCorriendo = false
+
+-- Arrastre en las pildoras: nil, 'Vol' o 'Brillo'
+local arrastrando = nil
+local RANURAS = 38
 
 -- Apps: centro de cada mosaico y medidores que se agrandan juntos
 local MOSAICOS = {
@@ -294,6 +299,19 @@ local function avanzar()
   return sigue
 end
 
+-- Lanza el cambio de brillo. Si el anterior no ha terminado, queda pendiente
+-- y se aplica cuando termine (BrilloAplicado).
+local function aplicarBrillo()
+  if brilloPendiente == nil or brilloCorriendo then
+    return
+  end
+  SKIN:Bang('!SetVariable', 'Brillo', string.format('%d', brilloPendiente))
+  SKIN:Bang('!UpdateMeasure', 'mBrilloPoner')
+  SKIN:Bang('!CommandMeasure', 'mBrilloPoner', 'Run')
+  brilloPendiente = nil
+  brilloCorriendo = true
+end
+
 local function animar()
   if not animando then
     animando = true
@@ -396,13 +414,8 @@ function Update()
     portadaAntes = hayPortada
   end
 
-  -- Brillo: se aplica como mucho una vez por segundo
-  if brilloPendiente ~= nil then
-    SKIN:Bang('!SetVariable', 'Brillo', string.format('%d', brilloPendiente))
-    SKIN:Bang('!UpdateMeasure', 'mBrilloPoner')
-    SKIN:Bang('!CommandMeasure', 'mBrilloPoner', 'Run')
-    brilloPendiente = nil
-  end
+  -- Brillo: mientras arrastras se aplica como mucho una vez por segundo
+  aplicarBrillo()
 
   -- Si algo cambio, arranca la animacion
   for clave, meta in pairs(objetivo) do
@@ -485,6 +498,7 @@ function PonerBrillo(y)
   local v = limitar(redondear(100 - y), 0, 100)
   objetivo.brillo = v / 100
   brilloPendiente = v
+  aplicarBrillo()
   animar()
 end
 
@@ -497,5 +511,78 @@ function SubirBrillo(paso)
   hayBrillo = true
   objetivo.brillo = v / 100
   brilloPendiente = v
+  aplicarBrillo()
   animar()
+end
+
+function BrilloAplicado()
+  brilloCorriendo = false
+  aplicarBrillo()
+end
+
+-- ---------------------------------------------------------------------
+--  Arrastre en las pildoras de volumen y brillo
+--  Cada pildora esta dividida en franjas (RanuraVol01..38, RanuraBrillo01..38).
+--  Presionar empieza el arrastre, pasar por otra franja con el clic
+--  sostenido cambia el valor, y soltar lo termina.
+-- ---------------------------------------------------------------------
+
+local function leerRanura(seccion)
+  local tipo, n = string.match(seccion, '^Ranura(%a+)(%d+)$')
+  return tipo, tonumber(n)
+end
+
+-- n va de 1 (arriba = 100) a RANURAS (abajo = 0)
+local function valorRanura(n)
+  return limitar(redondear(100 - (n - 1) / (RANURAS - 1) * 100), 0, 100)
+end
+
+local function fijar(tipo, v)
+  if tipo == 'Vol' then
+    if redondear(objetivo.vol * 100) ~= v then
+      SKIN:Bang('!CommandMeasure', 'mVolumen', 'SetVolume ' .. v)
+    end
+    objetivo.vol = v / 100
+  else
+    hayBrillo = true
+    objetivo.brillo = v / 100
+    brilloPendiente = v
+  end
+  animar()
+end
+
+function Presionar(seccion)
+  local tipo, n = leerRanura(seccion)
+  if n == nil then
+    return
+  end
+  arrastrando = tipo
+  fijar(tipo, valorRanura(n))
+end
+
+function Arrastrar(seccion)
+  if arrastrando == nil then
+    return
+  end
+  local tipo, n = leerRanura(seccion)
+  if tipo ~= arrastrando or n == nil then
+    return
+  end
+  fijar(tipo, valorRanura(n))
+end
+
+function Soltar()
+  if arrastrando == 'Brillo' then
+    aplicarBrillo()
+  end
+  arrastrando = nil
+end
+
+function Rueda(seccion, direccion)
+  local tipo = leerRanura(seccion)
+  if tipo == 'Vol' then
+    SubirVolumen(4 * direccion)
+  else
+    SubirBrillo(10 * direccion)
+  end
 end
