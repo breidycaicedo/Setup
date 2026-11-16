@@ -2,7 +2,7 @@
 
 Widgets de escritorio para Windows hechos con [Rainmeter](https://www.rainmeter.net): un reloj grande y un panel lateral estilo iPad con apps, RAM, CPU, música, fecha, progreso del día, volumen, brillo y batería.
 
-Todo corre dentro de un solo proceso de Rainmeter, que gasta unos pocos MB de RAM (nada que ver con los widgets de Windows o las apps hechas con Electron).
+Todo corre dentro de un solo proceso de Rainmeter, que gasta unos pocos MB de RAM (nada que ver con los widgets de Windows o las apps hechas con Electron). Las animaciones solo se ejecutan cuando algo cambia, así que en reposo no gastan nada.
 
 ```
 Setup/
@@ -38,9 +38,15 @@ Setup/
 
 5. Descarga los widgets de ejemplo que trae Rainmeter (clic derecho sobre ellos → *Unload skin*).
 
-### Música (opcional)
+### Música
 
-Para que el widget de música muestre la canción, la portada y los controles, instala el plugin **WebNowPlaying**: descarga el archivo `.rmskin` de https://github.com/keifufu/WebNowPlaying-Rainmeter/releases y ábrelo con doble clic. Funciona con Spotify de escritorio y con lo que suene en el navegador (YouTube, etc.). Sin el plugin, el widget solo dice "Nada sonando".
+Rainmeter no trae cómo leer la música, así que necesita el plugin **WebNowPlaying**:
+
+1. Entra a https://github.com/keifufu/WebNowPlaying-Rainmeter/releases y en la versión más reciente (no las "alpha") descarga el archivo que termina en `.rmskin`.
+2. Ábrelo con doble clic → *Install*. Instala el plugin y un skin de ejemplo.
+3. Descarga el skin de ejemplo (clic derecho → descargar piel) y dale *Actualizar todo*.
+
+Funciona con Spotify de escritorio y con lo que suene en el navegador (YouTube, etc.). Para que también salga la portada de lo que suena en el navegador, instala la extensión WebNowPlaying en Chrome o Edge. Sin el plugin, el widget solo dice "Nada sonando".
 
 ## Actualizar
 
@@ -58,7 +64,7 @@ Clic derecho sobre el panel → **Editar colores, apps y tamaño**. Se abre `Var
 
 - `S=1` → tamaño general. Si se ve pequeño en tu pantalla, prueba `1.2` o `1.4`.
 - `FormatoHoraReloj=%I` → reloj de 12 horas (`%H` para 24 horas).
-- `App1` … `App8` → nombre, icono, colores y lo que abre cada app.
+- `App1` … `App8` → nombre, icono, los dos colores del degradado (`Fondo` arriba y `Fondo2` abajo) y lo que abre cada app. La app 2 es un calendario con la fecha de hoy.
 - `FuenteIconos` → en **Windows 10** cámbiala a `Segoe MDL2 Assets`.
 
 Guarda y dale *Refresh skin*.
@@ -67,7 +73,7 @@ Guarda y dale *Refresh skin*.
 
 | Widget | Detalle |
 |---|---|
-| Apps | 8 accesos directos. Pasa el mouse para ver el nombre. |
+| Apps | 8 accesos directos estilo iPhone. Se agrandan al pasar el mouse y se encogen al hacer clic. |
 | RAM / CPU | Uso en tiempo real, se actualiza cada segundo. |
 | Música | Portada, canción, artista y controles (anterior, play/pausa, siguiente). |
 | Fecha | Día, fecha y hora. |
