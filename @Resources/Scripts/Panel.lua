@@ -40,6 +40,13 @@ local MOSAICOS = {
 local ESCALA_HOVER = 1.08
 local ESCALA_CLIC = 0.92
 
+-- Fondo del panel con bordes difuminados
+local PANEL_ANCHO = 320
+local PANEL_ALTO = 740
+local PANEL_RADIO = 28
+local CAPAS_FONDO = 10
+local fondoListo = false
+
 -- Animacion
 local SUAVIDAD = 0.2
 local animando = false
@@ -208,6 +215,37 @@ local function dibujarControles()
   pildora('RellenoBrillo', 'IconoBrillo', mostrado.brillo)
 end
 
+-- Apila CAPAS_FONDO rectangulos casi transparentes, cada uno mas adentro.
+-- Juntos dan el color del panel en el centro y se desvanecen hacia el borde.
+local function dibujarFondo()
+  local color = SKIN:GetVariable('ColorPanel') or ''
+  local r, g, b, a = string.match(color, '(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*,?%s*(%d*)')
+  r = tonumber(r) or 255
+  g = tonumber(g) or 255
+  b = tonumber(b) or 255
+  a = tonumber(a) or 255
+  local difuminado = tonumber(SKIN:GetVariable('Difuminado')) or 24
+  local alfa = 1 - (1 - a / 255) ^ (1 / CAPAS_FONDO)
+  local alfaCapa = limitar(redondear(alfa * 255), 1, 255)
+  local paso = difuminado / CAPAS_FONDO
+  local relleno = r .. ',' .. g .. ',' .. b .. ',' .. alfaCapa
+  for k = 0, CAPAS_FONDO - 1 do
+    local m = k * paso
+    local radio = PANEL_RADIO - m
+    if radio < 2 then
+      radio = 2
+    end
+    local forma = 'Rectangle ' .. num(m * S) .. ',' .. num(m * S) .. ','
+      .. num((PANEL_ANCHO - 2 * m) * S) .. ',' .. num((PANEL_ALTO - 2 * m) * S) .. ','
+      .. num(radio * S) .. ' | Fill Color ' .. relleno .. ' | StrokeWidth 0'
+    local opcion = 'Shape'
+    if k > 0 then
+      opcion = 'Shape' .. (k + 2)
+    end
+    poner('Fondo', opcion, forma)
+  end
+end
+
 local function dibujarMosaico(nombre)
   local m = MOSAICOS[nombre]
   local s = m.escala
@@ -283,6 +321,11 @@ function Initialize()
 end
 
 function Update()
+  if not fondoListo then
+    dibujarFondo()
+    fondoListo = true
+  end
+
   -- RAM
   local total = valor('mRAMTotal')
   ramTotalGB = total / 1073741824
